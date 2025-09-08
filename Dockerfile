@@ -1,24 +1,25 @@
-# Use Python slim image
-FROM python:3.12-slim
+# Use official lightweight Python image
+FROM python:3.9-slim
 
 # Set working directory
 WORKDIR /app
 
-# Install minimal system dependencies
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy project files
-COPY . /app
-
-# Upgrade pip and install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+# Copy requirements.txt (if you have one) and install dependencies
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose Streamlit port
+# Copy the entire repo
+COPY . .
+
+# Expose the port (8501 for Streamlit, 5000/8000 for Flask/FastAPI)
 EXPOSE 8501
 
-# Run Streamlit app
+# Default command (change this depending on your framework)
+# For Streamlit
 CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
 
+# If it's Flask, instead use:
+# CMD ["python", "app.py"]
+
+# If it's FastAPI with uvicorn:
+# CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
