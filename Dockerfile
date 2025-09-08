@@ -4,14 +4,9 @@ FROM python:3.12-slim
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies
+# Install minimal system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
-    python3-dev \
-    gcc \
-    g++ \
-    libblas-dev \
-    liblapack-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy project files
